@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>Change IMEI</title>
+        <link rel="stylesheet" href="css/element.css?t=56c3f1d1-2b71-4a3c-9071-9165deee6f2c">
+        <script type="text/javascript" src="js/jquery-1.7.2.js?t=56c3f1d1-2b71-4a3c-9071-9165deee6f2c"></script>
+</head>
+<body>
+        <p>Change IMEI by GL33CH3R</p>
+        <div style="float: left; width: 35%;">
+            <table  cellspacing="0" class="detail">
+               <tbody>
+               <tr>
+               <th>New IMEI:</th> 
+                <td>
+                    <div class="el-input" style="width: 220px;">
+                            <input id="imei" class="el-input__inner" type="text" onkeypress="onlyNumberKey(event)" onkeyup="checkFields();" name="imei" maxlength="15">
+                    </div>
+               </td>
+               </tr>
+               <tr>
+               <th>&nbsp;</th> 
+               <td>
+               <button id="change" class="el-button el-button--primary" disabled><span>Change</span></button>
+               </td>
+               </tr>
+               </tbody>
+               <div id="message"></div>
+            </table>
+        </div>
+</body>
+<script>
+function onlyNumberKey(evt) {
+        var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+          if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+              return false;
+          return true;
+}
+
+$("#change").click(function (e) {
+ event.preventDefault();
+ $.post("cgi-bin/imei.sh",{
+        imei: $("#imei").val(),
+    })
+    .done(function (result, status, xhr) {
+        if(result.replace(/(\r\n|\n|\r)/gm, "") == "recv:  OK"){
+            alert("Change IMEI Success, Please reboot your CPE to take effect.")
+        }else{
+            alert("Change IMEI failed, Please try again.")
+        }
+       
+    })
+    .fail(function (xhr, status, error) {
+        $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+    });
+});
+      
+function checkFields() {
+    var imei = document.getElementById("imei");
+    if (imei.value.length == 15) {
+        document.getElementById("change").disabled = false;
+        return true;
+    } else {
+        document.getElementById("change").disabled = true;
+        return false;
+    }
+}
+</script>
+
+</html>
