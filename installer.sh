@@ -9,3 +9,4 @@ chmod +x imei.sh
 cd ..
 rm -R changeImei.html
 wget https://raw.githubusercontent.com/Gl33ch3r/vn007/main/changeImei.html
+rm -R /tmp/installer.sh
